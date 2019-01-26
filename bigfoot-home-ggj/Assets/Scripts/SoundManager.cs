@@ -7,6 +7,7 @@ public class SoundManager : MonoBehaviour
 {
 
     public List<AudioClip> sounds;
+    public Dictionary<string,AudioClip> soundsDict;
 
     public AudioSource audioSource = new AudioSource();
     public AudioSource bgMusic = new AudioSource();
@@ -16,7 +17,8 @@ public class SoundManager : MonoBehaviour
      // need to create audio sources on each object or access the audio sources on here
     void Start() 
     {
-        sounds = new List<AudioClip>();
+        //sounds = new List<AudioClip>();
+        soundsDict = new Dictionary<string, AudioClip>();
         LoadSounds();
     }
 
@@ -28,7 +30,8 @@ public class SoundManager : MonoBehaviour
 
         foreach (string line in lines)
         {
-            sounds.Add(Resources.Load<AudioClip>("Sounds/" + line));
+            //sounds.Add(Resources.Load<AudioClip>("Sounds/" + line));
+            soundsDict[line] = Resources.Load<AudioClip>("Sounds/" + line);
 
         }
     }
@@ -49,13 +52,26 @@ public class SoundManager : MonoBehaviour
             bgMusic.Stop();
         }
     }
-    public void PlaySound(int i)
+    public void PlaySound(int i) 
     {
         //Debug.Log(i);
 
         if (audioSource != null && !audioSource.isPlaying)
         {
             audioSource.clip = sounds[i];
+            //s.loop = true;
+            audioSource.Play();
+        }
+        // else { s.Stop(); }
+    }
+
+    public void PlaySoundByName(AudioSource audioSource, string name)
+    {
+        //Debug.Log(i);
+
+        if (audioSource != null && !audioSource.isPlaying)
+        {
+            audioSource.clip = soundsDict[name];
             //s.loop = true;
             audioSource.Play();
         }
