@@ -33,7 +33,7 @@ public class SpawnEditor : Editor {
 
                     //Setup new Spawn's information
                     Spawn spawn_data = newPoint.GetComponent<Spawn>();
-                    spawn_data.state = Spawn.State.clear;
+                    spawn_data.state = Spawn.State.EMPTY;
                     spawn_data.id = spawn_count;
                     spawn_count++;
                 }

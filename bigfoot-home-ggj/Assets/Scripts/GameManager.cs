@@ -5,11 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	public SpawnManager spawnManager;
-	public List<Transform> spawns;
+	public List<Spawn> spawns;
     public SpawnSettings spawnSettings;
-
-    List<int> waves = new List<int>() { 3, 5, 8, 12, 20 };
-    List<float> waveDelay = new List<float>() { 3, 2.5f, 2f, 1.5f, 1f };
 
     public bool isGameOver;
     public bool isWaveOver;
@@ -21,11 +18,12 @@ public class GameManager : MonoBehaviour
     public void OnValidate()
     {
         Debug.Assert(spawnSettings != null, "Missing spawn settings. Create new Spawn Settings Asset");
+        Debug.Assert(spawnSettings.waves.Count > 0, "No wave data available in Spawn Settings");
     }
 
 	void Start ()
 	{
-        spawns = new List<Transform>();
+        spawns = new List<Spawn>();
         houses = new List<House>();
         spawnManager = new SpawnManager(spawnSettings);
         spawnContainer = new GameObject("Spawn Container").transform;
@@ -37,41 +35,41 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game has started.");
 
-        // Loop through waves
-        while (!isGameOver && currentWave < waves.Count)
+        Spawn spawn;
+
+        /// Create demo spawn points --- TO BE REMOVED
+        for (int i = 0; i < 20; i++)
         {
-            // Setup wave params
-            List<Transform> newSpawns = new List<Transform>();
-            if (spawns.Count < waves[currentWave])
-            {
-                var delta = waves[currentWave] - spawns.Count;
-                Debug.Log("Delta is " + delta);
-                for (int s = 0; s < delta; s++)
-                    newSpawns.Add(CreateNewSpawnPoint());
+            var spawn_t = CreateNewSpawnPoint();
+            spawn = spawn_t.gameObject.AddComponent<Spawn>();
+            spawns.Add(spawn);
+            OffsetRandomlyWithinRangeFromOrigin(spawns);
+        }
+        ///
 
-                OffsetRandomlyWithinRangeFromOrigin(newSpawns);
-                spawns.AddRange(newSpawns);
-            }
+        currentWave = 0;
 
-            // Execute wave
+        while (!isGameOver)
+        {
             isWaveOver = false;
+            StartCoroutine(WaveDurationCounter(spawnSettings.waves[currentWave].duration));
+
             while (!isWaveOver)
             {
-                Debug.LogFormat("Wave {0} starting with {1} spawn points", currentWave, spawns.Count);
-                houses.AddRange(CreateHouses(newSpawns));
-                
-                while(GrowRandomHouse())
+                GrowRandomHouse();
+                spawn = GetEmptySpawn();
+                if(spawn != null)
                 {
-                    //yield return new WaitForSeconds(waveDelay[currentWave]);
-                    yield return new WaitForSeconds(0.1f);
+                    houses.AddRange(CreateHouses(new List<Transform>() { spawn.transform }));
+                    spawn.state = Spawn.State.OCCUPIED;
                 }
-
-                yield return new WaitForEndOfFrame();
-                isWaveOver = true;
-                Debug.Log("Wave is over");
+                yield return new WaitForSeconds(spawnSettings.waves[currentWave].spawnDelay);
             }
 
-            currentWave++;
+            if(currentWave + 1 < spawnSettings.waves.Count)
+            {
+                currentWave++;
+            }
         }
 
         isGameOver = true;
@@ -81,6 +79,18 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
+    public IEnumerator WaveDurationCounter(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        isWaveOver = true;
+        yield return null;
+    }
+
+    public Spawn GetEmptySpawn()
+    {
+        return spawns.Find(x => x.state == Spawn.State.EMPTY);
+    }
+
     public Transform CreateNewSpawnPoint()
     {
         var spawnPoint = new GameObject("Spawn").transform;
@@ -88,11 +98,11 @@ public class GameManager : MonoBehaviour
         return spawnPoint;
     }
 
-    public void OffsetRandomlyWithinRangeFromOrigin(List<Transform> transforms)
+    public void OffsetRandomlyWithinRangeFromOrigin(List<Spawn> spawns)
     {
-        foreach(var transform in transforms)
+        foreach(var spawn in spawns)
         {
-            transform.position = new Vector3(
+            spawn.transform.position = new Vector3(
                 Random.Range(-5f, 5f), 
                 0,
                 Random.Range(-5f, 5f));

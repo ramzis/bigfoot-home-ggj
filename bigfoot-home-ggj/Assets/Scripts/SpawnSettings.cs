@@ -7,6 +7,7 @@ public class SpawnSettings : ScriptableObject
 {
     public List<GameObject> models;
     public List<float> startingHealth;
+    public List<Wave> waves;
 
     public State firstState = State.CONSTRUCTION;
     public State lastState = State.SKYSCRAPER;
