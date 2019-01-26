@@ -10,6 +10,9 @@ public class SpawnEditor : Editor {
     private GameObject SpawnPrefab;
     private GameObject SpawnParent;
 
+    //If Enable Editor is checked, select a GameObject with SpawnContainer component, then click somewhere in the Scene view
+    //to spawn a spawn point
+
     void OnSceneGUI()
     {
         if (EditorEnabled)
@@ -30,6 +33,7 @@ public class SpawnEditor : Editor {
         }
     }
 	
+    
     public override void OnInspectorGUI(){
         EditorEnabled = GUILayout.Toggle(EditorEnabled, "Enable Editor");
     }
