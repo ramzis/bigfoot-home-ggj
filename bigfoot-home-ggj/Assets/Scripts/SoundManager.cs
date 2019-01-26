@@ -35,7 +35,10 @@ public class SoundManager : MonoBehaviour
 
         }
     }
-
+    public void SetToggleAudioLooping(AudioSource audioSource, bool toggle)
+    {
+        audioSource.loop = toggle;
+    }
 
     public void PlayBackgroundMusic()
     {
@@ -69,7 +72,7 @@ public class SoundManager : MonoBehaviour
     {
         //Debug.Log(i);
 
-        if (audioSource != null && !audioSource.isPlaying)
+        if (audioSource != null && !audioSource.isPlaying && soundsDict.ContainsKey(name))
         {
             audioSource.clip = soundsDict[name];
             //s.loop = true;
