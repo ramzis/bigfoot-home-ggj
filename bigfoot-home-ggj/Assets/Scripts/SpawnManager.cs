@@ -5,27 +5,25 @@ using UnityEngine;
 
 public class SpawnManager
 {
-	private float houseStartingHealth;
-	private List<GameObject> houseModels;
+    private SpawnSettings settings;
 
-	public SpawnManager(List<GameObject> houseModels, float houseStartingHealth)
+	public SpawnManager(SpawnSettings spawnSettings)
 	{
-		this.houseStartingHealth = houseStartingHealth;
-		this.houseModels = houseModels;
+        settings = spawnSettings;
 	}
 
-	public List<House> CreateHouses(List<GameObject> spawns)
+	public List<House> CreateHouses(List<Transform> spawns)
 	{
 		List<House> houses = new List<House>();
-		foreach (GameObject spawn in spawns)
+		foreach (Transform spawn in spawns)
 		{
 			Debug.Log("Creating object @ " + spawn);
-			//TODO pick whether it is house or other entity
 			if(spawn != null)
 			{
-				var house = spawn.AddComponent<House>();
-				house.Init(houseModels, houseStartingHealth);
-				house.OnHouseDestroyed += OnHouseDestroyed;
+                GameObject house_go = new GameObject("House");
+                house_go.transform.position = spawn.position;
+				var house = house_go.AddComponent<House>();
+				house.Init(settings);
 				houses.Add(house);
 			}
 			else
@@ -33,12 +31,11 @@ public class SpawnManager
 				Debug.LogWarning("Tried to interact with null spawn point " + spawn);
 			}
 		}
-
 		return houses;
 	}
 
-	public void OnHouseDestroyed(GameObject house)
-	{
-		Debug.LogFormat("A house was destroyed");
-	}
+    public List<GameObject> CreateObstacles(List<Transform> spawns)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8ae6a27aedbc34fa092b7e1b6c6385, type: 3}
+  m_Name: Spawn Settings
+  m_EditorClassIdentifier: 
+  models:
+  - {fileID: 1165437447886342, guid: f63bd83480ca21242893e501797ffd86, type: 2}
+  - {fileID: 1838299809362740, guid: 7db8929ed6167a646998dec4a190c481, type: 2}
+  - {fileID: 1427270479941006, guid: 4eedd2ad6ae7a074a880e4df67b5d3a1, type: 2}
+  - {fileID: 1386251578332228, guid: 0bda8420fb047d14dbe3269756c73adf, type: 2}
+  startingHealth:
+  - 20
+  - 40
+  - 80
+  - 140
+  firstState: 0
+  lastState: 3

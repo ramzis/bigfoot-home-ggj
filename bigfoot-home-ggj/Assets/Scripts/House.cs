@@ -5,29 +5,19 @@ using UnityEngine;
 
 public class House : MonoBehaviour
 {
-	public enum State
-	{
-		EMPTY = -1,
-		CONSTRUCTION = 0,
-		HOUSE = 1,
-		APARTMENT = 2,
-		SKYSCRAPER = 3
-	}
-
 	public float health;
-	public State state;
-	public Action<GameObject> OnHouseDestroyed;
-	private List<GameObject> models;
-	private State firstState = State.CONSTRUCTION;
-	private State lastState = State.SKYSCRAPER;
+	public SpawnSettings.State state;
+    public SpawnSettings settings;
+	public Action<House> OnHouseDestroyed;
+
 	private GameObject spawnedModel;
 
-	public void Init(List<GameObject> models, float startingHealth)
+	public void Init(SpawnSettings settings)
 	{
-		state = firstState;
-		this.models = models;
-		this.health = startingHealth;
+        this.settings = settings;
+		state = settings.firstState;
 		UpdateModelBasedOnState();
+        UpdateHealthBasedOnState();
 	}
 
 	public void UpdateModelBasedOnState()
@@ -37,11 +27,11 @@ public class House : MonoBehaviour
 			Destroy(spawnedModel);
 		}
 
-		if (state >= firstState && state <= lastState)
+		if (state >= settings.firstState && state <= settings.lastState)
 		{
-			if (models.Count > (int) state)
+			if (settings.models.Count > (int) state)
 			{
-				spawnedModel = Instantiate(models[(int) state]);
+				spawnedModel = Instantiate(settings.models[(int) state], gameObject.transform.position, Quaternion.identity, transform);
 			}
 			else
 			{
@@ -50,24 +40,41 @@ public class House : MonoBehaviour
 		}
 	}
 
+    public void UpdateHealthBasedOnState()
+    {
+        if (state >= settings.firstState && state <= settings.lastState)
+        {
+            if (settings.startingHealth.Count > (int)state)
+            {
+                health = settings.startingHealth[(int)state];
+            }
+            else
+            {
+                Debug.LogWarningFormat("Not enough models for state {0}", state);
+            }
+        }
+    }
+
 	public void NextState()
 	{
 		int nextState = (int)state + 1;
-		if(nextState > (int)lastState || nextState < (int)State.EMPTY)
+		if(nextState > (int)settings.lastState || nextState < (int)SpawnSettings.State.EMPTY)
 		{
 			Debug.LogWarningFormat("Attempted to set state to invalid range {0}", nextState);
 		}
 		else
 		{
-			state = (State)nextState;
+			state = (SpawnSettings.State)nextState;
 			UpdateModelBasedOnState();
-		}
-	}
+            UpdateHealthBasedOnState();
+        }
+    }
 
 	public void SetEmptyState()
 	{
-		state = State.EMPTY;
+		state = SpawnSettings.State.EMPTY;
 		UpdateModelBasedOnState();
+        health = 0;
 	}
 
 	public void TakeDamage(float damage)
@@ -82,7 +89,7 @@ public class House : MonoBehaviour
 			if (health <= 0)
 			{
 				if(OnHouseDestroyed != null)
-					OnHouseDestroyed.Invoke(gameObject);
+					OnHouseDestroyed.Invoke(this);
 			}
 		}
 	}
