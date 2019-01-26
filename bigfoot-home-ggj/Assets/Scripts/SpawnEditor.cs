@@ -10,6 +10,8 @@ public class SpawnEditor : Editor {
     private GameObject SpawnPrefab;
     private GameObject SpawnParent;
 
+    private static int spawn_count = 0;
+
     //If Enable Editor is checked, select a GameObject with SpawnContainer component, then click somewhere in the Scene view
     //to spawn a spawn point
 
@@ -28,6 +30,12 @@ public class SpawnEditor : Editor {
                     GameObject newPoint = GameObject.Instantiate(SpawnPrefab);
                     newPoint.transform.position = hitInfo.point + new Vector3 (0f, 0.5f, 0f);
                     newPoint.transform.parent = SpawnParent.transform;
+
+                    //Setup new Spawn's information
+                    Spawn spawn_data = newPoint.GetComponent<Spawn>();
+                    spawn_data.state = Spawn.State.clear;
+                    spawn_data.id = spawn_count;
+                    spawn_count++;
                 }
             }
         }
@@ -36,5 +44,7 @@ public class SpawnEditor : Editor {
     
     public override void OnInspectorGUI(){
         EditorEnabled = GUILayout.Toggle(EditorEnabled, "Enable Editor");
+        if (GUILayout.Button("Clear spawn count"))
+            spawn_count = 0;
     }
 }
