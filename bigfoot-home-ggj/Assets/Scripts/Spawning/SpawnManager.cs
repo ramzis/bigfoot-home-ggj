@@ -7,17 +7,20 @@ using UnityEngine;
 public class SpawnManager
 {
     private SpawnSettings settings;
-    private Dictionary<Spawn, House> houseSpawnMap;
+    // private Dictionary<Spawn, House> houseSpawnMap;
+
+    private List<House> houses;
 
     public SpawnManager(SpawnSettings spawnSettings)
 	{
         settings = spawnSettings;
-        houseSpawnMap = new Dictionary<Spawn, House>();
+        //houseSpawnMap = new Dictionary<Spawn, House>();
+        houses = new List<House>();
     }
 
 	public House CreateHouse(Transform spawn)
 	{
-		Debug.Log("Creating house @ " + spawn);
+		// Debug.Log("Creating house @ " + spawn);
 		if(spawn != null)
 		{
             GameObject house_go = new GameObject("House");
@@ -41,44 +44,69 @@ public class SpawnManager
     public void PopulateSpawns()
     {
         var spawnContainer = GameObject.FindObjectOfType<SpawnContainer>();
+        House house;
 
         if (spawnContainer != null)
         {
             if (spawnContainer.SpawnList == null)
             {
-                Debug.Log("Null spawn list");
+                Debug.Log("Null house spawn list");
             }
             else
             {
-                houseSpawnMap.Clear();
                 foreach (var spawn in spawnContainer.SpawnList)
                 {
-                    var house = CreateHouse(spawn.transform);
-                    spawn.state = Spawn.State.OCCUPIED;
-                    if (houseSpawnMap.ContainsKey(spawn))
-                    {
-                        houseSpawnMap[spawn] = house;
-                    }
-                    else
-                    {
-                        houseSpawnMap.Add(spawn, house);
-                    }
+                    house = CreateHouse(spawn.transform);
+                    houses.Add(house);
                 }
             }
         }
     }
 
-    public void ResetHouseAtSpawn(Spawn spawn)
+    public void ResetHouse(House house)
     {
-        houseSpawnMap[spawn].Init(settings);
+        if(house != null)
+        {
+            house.state = SpawnSettings.State.EMPTY;
+            house.UpdateHealthBasedOnState();
+            house.UpdateModelBasedOnState();
+        }
     }
 
-    public Spawn GetEmptySpawn()
+    public House GetEmptyHouse()
     {
-        var emptySpawns = houseSpawnMap.Keys.Where(x => x.state == Spawn.State.EMPTY).ToList();
-        if (emptySpawns.Count > 0)
+        var emptyHouses = houses.FindAll(x => x.state == SpawnSettings.State.EMPTY);
+
+        if (emptyHouses.Count > 0)
         {
-            return emptySpawns[Random.Range(0, emptySpawns.Count)];
+            return emptyHouses[Random.Range(0, emptyHouses.Count)];
+        }
+        else
+        {
+            Debug.Log("No empty houses");
+            return null;
+        }
+    }
+
+    public House GetRandomRubbleHouse()
+    {
+        var emptyHouses = houses.Where(x => x.state == SpawnSettings.State.RUBBLE).ToList();
+        if (emptyHouses.Count > 0)
+        {
+            return emptyHouses[Random.Range(0, emptyHouses.Count)];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public House GetNonEmptyHouse()
+    {
+        var nonEmptyHouses = houses.Where(x => x.state != SpawnSettings.State.EMPTY && x.state != SpawnSettings.State.RUBBLE).ToList();
+        if (nonEmptyHouses.Count > 0)
+        {
+            return nonEmptyHouses[Random.Range(0, nonEmptyHouses.Count)];
         }
         else
         {
@@ -88,10 +116,9 @@ public class SpawnManager
 
     public bool GrowRandomHouse()
     {
-        var unfinishedHouses = houseSpawnMap.Values.Where(x => x != null && x.state != settings.lastState).ToList();
-        if (unfinishedHouses.Count > 0)
+        var house = GetNonEmptyHouse();
+        if (house != null)
         {
-            var house = unfinishedHouses[Random.Range(0, unfinishedHouses.Count)];
             house.NextState();
             return true;
         }
@@ -102,24 +129,44 @@ public class SpawnManager
         }
     }
 
-    public Spawn SpawnFromHouse(House house)
+    public bool GrowNewHouse()
     {
-        Spawn spawn = null;
-        foreach (var item in houseSpawnMap)
+        var house = GetEmptyHouse();
+        if (house != null)
         {
-            if (item.Value == house)
-            {
-                spawn = item.Key;
-                break;
-            }
+            Debug.Log("Grew new house");
+            house.state = settings.firstState;
+            house.UpdateHealthBasedOnState();
+            house.UpdateModelBasedOnState();
+            return true;
         }
-        return spawn;
+        else
+        {
+            Debug.Log("No spots for new houses to grow");
+            return false;
+        }
+    }
+
+    public bool ResetRandomDestroyedHouse()
+    {
+        var house = GetRandomRubbleHouse();
+        if(house != null)
+        {
+            house.ResetHouse();
+            Debug.Log("Reset some rubble");
+            return true;
+        }
+        else
+        {
+            Debug.Log("No rubble found to reset");
+            return false;
+        }
     }
 
     public int CalculatePollution()
     {
         int sum = 0;
-        foreach (var house in houseSpawnMap.Values)
+        foreach (var house in houses)
         {
             if (house != null)
             {

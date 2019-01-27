@@ -16,7 +16,7 @@ public class House : MonoBehaviour
 	public void Init(SpawnSettings settings)
 	{
         this.settings = settings;
-		state = settings.firstState;
+		state = SpawnSettings.State.EMPTY;
 		UpdateModelBasedOnState();
         UpdateHealthBasedOnState();
 	}
@@ -128,11 +128,17 @@ public class House : MonoBehaviour
         }
     }
 
+    public void ResetHouse()
+    {
+        state = SpawnSettings.State.EMPTY;
+        UpdateHealthBasedOnState();
+        UpdateModelBasedOnState();
+    }
+
     public IEnumerator Respawn()
     {
         yield return new WaitForSeconds(Random.Range(1f, 3f));
-        state = SpawnSettings.State.EMPTY;
-        UpdateModelBasedOnState();
-        UpdateHealthBasedOnState();
+        Debug.Log("Reset house");
+        ResetHouse();
     }
 }

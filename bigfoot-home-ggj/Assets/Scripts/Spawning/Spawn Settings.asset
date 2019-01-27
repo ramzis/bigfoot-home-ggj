@@ -27,5 +27,5 @@ MonoBehaviour:
     spawnDelay: 2
   - duration: 10
     spawnDelay: 1
-  firstState: -1
+  firstState: 0
   lastState: 3

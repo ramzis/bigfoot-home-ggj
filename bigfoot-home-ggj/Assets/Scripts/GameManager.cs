@@ -54,8 +54,6 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game has started.");
 
-        Spawn spawn;
-
         currentWave = 0;
         pollution = 0;
         ticks = 0;
@@ -76,16 +74,7 @@ public class GameManager : MonoBehaviour
                 // Update existing houses
                 spawnManager.GrowRandomHouse();
                 // Create new houses
-                spawn = spawnManager.GetEmptySpawn();
-                if (spawn != null)
-                {
-                    spawnManager.ResetHouseAtSpawn(spawn);
-                    spawn.state = Spawn.State.OCCUPIED;
-                }
-                else
-                {
-                    Debug.Log("No empty spawns found");
-                }
+                spawnManager.GrowNewHouse();
                 // Random grunt chance
                 PlayGruntRandomly();
                 // Calculate pollution caused by houses
@@ -95,12 +84,17 @@ public class GameManager : MonoBehaviour
                 // Check for Game Over condition
                 if (pollution > threshold)
                 {
+                    isWaveOver = true;
                     GameOver();
                 }
                 ticks++;
                 // Delay between spawning more houses
                 yield return new WaitForSeconds(spawnSettings.waves[currentWave].spawnDelay);
             }
+
+            if (isGameOver)
+                break;
+
             // Go to next wave or stay at last one
             if(currentWave + 1 < spawnSettings.waves.Count)
             {
@@ -108,7 +102,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        GameOver();
         yield return null;
     }
 
@@ -137,9 +130,11 @@ public class GameManager : MonoBehaviour
     public void OnHouseDestroyed(House house)
     {
         Debug.LogFormat("A {0} was destroyed", house.state);
-        Spawn spawn = spawnManager.SpawnFromHouse(house);
-        if(spawn != null)
-            spawn.state = Spawn.State.EMPTY;
+        if(house != null)
+        {
+            house.SetRubbleState();
+            StartCoroutine(house.Respawn());
+        }
 
         int cleaningValue = house.GetPollution();
         pollution -= (int)((cleaningValue * ticks) / 1.5f);
