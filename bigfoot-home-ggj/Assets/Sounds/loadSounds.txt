@@ -1,0 +1,9 @@
+bigfoot_crying1
+footsteps_test
+long_destroy_building
+long_victory_cry
+running_footsteps_loop
+short_destroy_building
+short_growl
+short_punchy_growl
+slow_footsteps_buildup_for_running
