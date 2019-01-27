@@ -7,12 +7,18 @@ using UnityEditor;
 public class SpawnEditor : Editor {
 
     private static bool EditorEnabled = false;
-    private GameObject SpawnPrefab;
-    private GameObject SpawnParent;
+    private GameObject spawnPrefab;
+    private GameObject spawnParent;
 
     private static int spawn_count = 0;
     //If Enable Editor is checked, select a GameObject with SpawnContainer component, then click somewhere in the Scene view
     //to spawn a spawn point
+
+    void OnEnable()
+    {
+        spawnPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Spawn.prefab", typeof(GameObject));
+        spawnParent = GameObject.Find("Spawns");
+    }
 
     void OnSceneGUI()
     {
@@ -24,17 +30,15 @@ public class SpawnEditor : Editor {
                 RaycastHit hitInfo;
                 if (Physics.Raycast(r, out hitInfo))
                 {
-                    SpawnParent = GameObject.Find("Spawns");
-                    SpawnPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Spawn.prefab", typeof(GameObject));
-                    GameObject newPoint = GameObject.Instantiate(SpawnPrefab);
+                    GameObject newPoint = GameObject.Instantiate(spawnPrefab);
                     newPoint.transform.position = hitInfo.point + new Vector3 (0f, 0.5f, 0f);
-                    newPoint.transform.parent = SpawnParent.transform;
+                    newPoint.transform.parent = spawnParent.transform;
 
                     //Setup new Spawn's information
                     Spawn spawn_data = newPoint.GetComponent<Spawn>();
                     spawn_data.state = Spawn.State.EMPTY;
                     spawn_data.id = spawn_count;
-                    SpawnParent.GetComponent<SpawnContainer>().SpawnList.Add(spawn_data);
+                    spawnParent.GetComponent<SpawnContainer>().SpawnList.Add(spawn_data);
                     spawn_count++;
                 }
             }
@@ -46,8 +50,16 @@ public class SpawnEditor : Editor {
         EditorEnabled = GUILayout.Toggle(EditorEnabled, "Enable Editor");
         if (GUILayout.Button("Clear spawn count")){
             spawn_count = 0;
-            SpawnParent = GameObject.Find("Spawns");
-            SpawnParent.GetComponent<SpawnContainer>().SpawnList.Clear();
+            if (spawnParent != null)
+            {
+                SpawnContainer sC = spawnParent.GetComponent<SpawnContainer>();
+                foreach (var spawn in sC.SpawnList)
+                {
+                    if (spawn != null)
+                        GameObject.DestroyImmediate(spawn.gameObject);
+                }
+                sC.SpawnList.Clear();
+            }
         }
     }
 }
