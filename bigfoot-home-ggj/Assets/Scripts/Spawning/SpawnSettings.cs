@@ -18,6 +18,7 @@ public class SpawnSettings : ScriptableObject
         CONSTRUCTION = 0,
         HOUSE = 1,
         APARTMENT = 2,
-        SKYSCRAPER = 3
+        SKYSCRAPER = 3,
+        RUBBLE = 4
     }
 }
