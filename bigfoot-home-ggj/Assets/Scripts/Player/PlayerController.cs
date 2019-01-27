@@ -5,14 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
 
-    [SerializeField] float m_MoveSpeed = 7.5f;
-    [SerializeField] float m_JumpPower = 10f;
-    [SerializeField] float m_GroundCheckDistance = 0.1f;
-
+    [SerializeField] float m_MoveSpeed = 5f;
+    [SerializeField] float m_TurnSpeed = 10f;
     Animator m_Animator;
     Rigidbody m_Rigidbody;
-    bool m_Grounded;
-    bool m_Jump;
     CapsuleCollider m_Collider;
     Transform m_Cam;
     Vector3 m_CamForward;
@@ -25,12 +21,7 @@ public class PlayerController : MonoBehaviour {
         m_Collider = GetComponent<CapsuleCollider>();
         if (Camera.main != null)
             m_Cam = Camera.main.transform;
-    }
-
-    void Update()
-    {
-        if (!m_Jump)
-            m_Jump = Input.GetButtonDown("Jump");
+        m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     void FixedUpdate()
@@ -42,12 +33,17 @@ public class PlayerController : MonoBehaviour {
             m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1,0,1)).normalized;
             m_Move = v*m_CamForward + h*m_Cam.right;
         }
-        Move(m_Move, m_Jump);
-        m_Jump = false;
+        Move(m_Move);
     }
 
-    void Move(Vector3 move, bool jump)
+    void Move(Vector3 move)
     {
-        
+        if (move.normalized == Vector3.zero){
+            m_Animator.SetBool("Idle", true);
+            return;
+        }
+        m_Rigidbody.velocity = move * m_MoveSpeed;
+        transform.forward = Vector3.Lerp(transform.forward, move, m_TurnSpeed * Time.deltaTime);
+        m_Animator.SetBool("Idle", false);
     }
 }
