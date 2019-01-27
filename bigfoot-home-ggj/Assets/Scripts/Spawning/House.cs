@@ -93,4 +93,23 @@ public class House : MonoBehaviour
 			}
 		}
 	}
+
+    public int GetPollution()
+    {
+        switch (state)
+        {
+            case SpawnSettings.State.EMPTY:
+                return 0;
+            case SpawnSettings.State.CONSTRUCTION:
+                return 5;
+            case SpawnSettings.State.HOUSE:
+                return 10;
+            case SpawnSettings.State.APARTMENT:
+                return 15;
+            case SpawnSettings.State.SKYSCRAPER:
+                return 20;
+            default:
+                return 0;
+        }
+    }
 }

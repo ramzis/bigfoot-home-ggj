@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+[RequireComponent(typeof(UIManager))]
 public class GameManager : MonoBehaviour
 {
 	public SpawnManager spawnManager;
+    public UIManager uiManager;
 	public List<Spawn> spawns;
     public SpawnSettings spawnSettings;
 
     public bool isGameOver;
     public bool isWaveOver;
     public int currentWave = 0;
+    public int pollution = 0;
+    public int threshold = 200;
+    public int ticks = 0;
     public Dictionary<Spawn, House> houseSpawnMap;
-
-    private Transform spawnContainer;
 
     public void OnValidate()
     {
@@ -24,55 +27,62 @@ public class GameManager : MonoBehaviour
 
 	void Start ()
 	{
+        uiManager = GetComponent<UIManager>();
         spawns = new List<Spawn>();
         houseSpawnMap = new Dictionary<Spawn, House>();
-        houseSpawnMap.Clear();
         spawnManager = new SpawnManager(spawnSettings);
-        spawnContainer = new GameObject("Spawn Container").transform;
         isGameOver = false;
+        UpdateSpawns();
         StartCoroutine(Play());
 	}
+
+    public void UpdateSpawns()
+    {
+        var spawnContainer = FindObjectOfType<SpawnContainer>();
+
+        if (spawnContainer != null)
+        {
+            if (spawnContainer.SpawnList == null)
+            {
+                Debug.Log("Null spawn list");
+            }
+            else
+            {
+                houseSpawnMap.Clear();
+                foreach (var s in spawnContainer.SpawnList)
+                {
+                    houseSpawnMap.Add(s, null);
+                }
+            }
+        }
+    }
 
     public IEnumerator Play()
     {
         Debug.Log("Game has started.");
 
         Spawn spawn;
-
-        var spawns_go = GameObject.Find("Spawns");
-        if(spawns_go != null)
-        {
-            var spawnContainer = spawns_go.GetComponent<SpawnContainer>();
-            if(spawnContainer != null)
-            {
-                if(spawnContainer.SpawnList == null)
-                {
-                    Debug.Log("Null spawn list");
-                }
-                else
-                {
-                    foreach(var s in spawnContainer.SpawnList)
-                    {
-                        houseSpawnMap.Add(s, null);
-                    }
-                }
-            }
-        }
+        House house;
 
         currentWave = 0;
+        pollution = 0;
+        ticks = 0;
 
         while (!isGameOver)
         {
             isWaveOver = false;
+            // Delay between moving to next wave
             StartCoroutine(WaveDurationCounter(spawnSettings.waves[currentWave].duration));
 
             while (!isWaveOver)
             {
+                // Update existing houses
                 GrowRandomHouse();
+                // Create new houses
                 spawn = GetEmptySpawn();
                 if (spawn != null)
                 {
-                    var house = CreateHouse(spawn.transform);
+                    house = CreateHouse(spawn.transform);
                     spawn.state = Spawn.State.OCCUPIED;
                     if(houseSpawnMap.ContainsKey(spawn))
                     {
@@ -87,20 +97,34 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log("No empty spawns found");
                 }
+                // Calculate pollution caused by houses
+                pollution += CalculatePollution();
+                uiManager.pollutionDisplay.text = pollution.ToString();
+                if (pollution > threshold)
+                {
+                    GameOver();
+                }
+                ticks++;
+                // Delay between spawning more houses
                 yield return new WaitForSeconds(spawnSettings.waves[currentWave].spawnDelay);
             }
-
+            // Go to next wave or stay at last one
             if(currentWave + 1 < spawnSettings.waves.Count)
             {
                 currentWave++;
             }
         }
 
-        isGameOver = true;
+        GameOver();
 
         Debug.Log("Game over!");
 
         yield return null;
+    }
+
+    public void GameOver()
+    {
+        isGameOver = true;
     }
 
     public IEnumerator WaveDurationCounter(float duration)
@@ -112,36 +136,22 @@ public class GameManager : MonoBehaviour
 
     public Spawn GetEmptySpawn()
     {
-        return houseSpawnMap.Keys.FirstOrDefault(x => x.state == Spawn.State.EMPTY);
-
-    }
-
-    public Transform CreateNewSpawnPoint()
-    {
-        var spawnPoint = new GameObject("Spawn").transform;
-        spawnPoint.parent = spawnContainer;
-        return spawnPoint;
-    }
-
-    public void OffsetRandomlyWithinRangeFromOrigin(List<Spawn> spawns)
-    {
-        foreach(var spawn in spawns)
+        var emptySpawns = houseSpawnMap.Keys.Where(x => x.state == Spawn.State.EMPTY).ToList();
+        if (emptySpawns.Count > 0)
         {
-            spawn.transform.position = new Vector3(
-                Random.Range(-5f, 5f), 
-                0,
-                Random.Range(-5f, 5f));
+            return emptySpawns[Random.Range(0, emptySpawns.Count)];
+        }
+        else
+        {
+            return null;
         }
     }
 
     public House CreateHouse(Transform spawn)
     {
-        List<House> houses = spawnManager.CreateHouses(new List<Transform>() { spawn });
-        foreach (var house in houses)
-        {
-            house.OnHouseDestroyed += OnHouseDestroyed;
-        }
-        return houses[0];
+        House house = spawnManager.CreateHouse(spawn);
+        house.OnHouseDestroyed += OnHouseDestroyed;
+        return house;
     }
 
     public void OnHouseDestroyed(House house)
@@ -164,7 +174,11 @@ public class GameManager : MonoBehaviour
             spawn.state = Spawn.State.EMPTY;
         }
 
+        int cleaningValue = house.GetPollution();
+        pollution -= (int)((cleaningValue * ticks) / 1.5f);
+
         Destroy(house.gameObject);
+
     }
 
     public bool GrowRandomHouse()
@@ -181,5 +195,18 @@ public class GameManager : MonoBehaviour
             Debug.Log("No houses to grow");
             return false;
         }
+    }
+
+    public int CalculatePollution()
+    {
+        int sum = 0;
+        foreach(var house in houseSpawnMap.Values)
+        {
+            if(house != null)
+            {
+                sum += house.GetPollution();
+            }
+        }
+        return sum;
     }
 }

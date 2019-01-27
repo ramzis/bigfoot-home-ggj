@@ -24,6 +24,8 @@ public class SpawnEditor : Editor {
     {
         if (EditorEnabled)
         {
+            Selection.activeGameObject = GameObject.Find("Spawns");
+
             if (Event.current.type == EventType.MouseDown)
             {
                 Ray r = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
