@@ -26,9 +26,17 @@ namespace UnityStandardAssets.Utility
 		// Update is called once per frame
 		void LateUpdate()
 		{
-			// Early out if we don't have a target
-			if (!target)
-				return;
+            // Early out if we don't have a target
+            if (!target)
+            {
+                var t = GameObject.FindGameObjectWithTag("Player");
+                if(t != null)
+                {
+                    target = t.transform;
+                }
+				else
+                    return;
+            }
 
 			// Calculate the current rotation angles
 			var wantedRotationAngle = target.eulerAngles.y;
