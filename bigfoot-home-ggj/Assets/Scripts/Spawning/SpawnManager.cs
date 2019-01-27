@@ -38,14 +38,13 @@ public class SpawnManager
 		}
 	}
 
-    public void CreateObstacles(Transform spawn)
+    public void CreateObstacle(Transform spawn)
     {
         if (spawn != null)
         {
-            GameObject obstacle_rand = settings.obstacles[0];
-            GameObject obstacle_go = new GameObject("Obstacle");
-            obstacle_go.transform.position = spawn.position;
-            //var obstacle = obstacle_go.AddComponent<GameObject>();
+            if (settings.obstacles.Count < 0)
+                return;
+            GameObject obstacle_rand = GameObject.Instantiate(settings.obstacles[Random.Range(0, settings.obstacles.Count)], spawn.position, Quaternion.identity);
         }
         else
         {
@@ -70,6 +69,26 @@ public class SpawnManager
                 {
                     house = CreateHouse(spawn.transform);
                     houses.Add(house);
+                }
+            }
+
+            if (spawnContainer.ObstacleSpawns == null)
+            {
+                Debug.Log("Null obstacle spawn list");
+            }
+            else
+            {
+                Debug.Log("There are obstacles " + spawnContainer.ObstacleSpawns.Count);
+                foreach (var spawn in spawnContainer.ObstacleSpawns)
+                {
+                    if (spawn == null)
+                    {
+                        Debug.LogWarning("Null spawn");
+                    }
+                    else
+                    {
+                        CreateObstacle(spawn.transform);        
+                    }
                 }
             }
         }

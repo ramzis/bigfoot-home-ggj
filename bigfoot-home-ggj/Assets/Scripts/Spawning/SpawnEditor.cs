@@ -81,6 +81,7 @@ public class SpawnEditor : Editor {
                         if (spawn != null)
                             GameObject.DestroyImmediate(spawn.gameObject);
                     }
+                    sC.ObstacleSpawns.Clear();
                 }
             }
         }
