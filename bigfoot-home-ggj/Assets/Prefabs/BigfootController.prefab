@@ -143,7 +143,6 @@ GameObject:
   - component: {fileID: 54809813337504474}
   - component: {fileID: 136747115659373964}
   - component: {fileID: 114218735211971092}
-  - component: {fileID: 114529473821619274}
   m_Layer: 0
   m_Name: BigfootController
   m_TagString: Player
@@ -2155,18 +2154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MoveSpeed: 7.5
   m_TurnSpeed: 10
---- !u!114 &114529473821619274
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1103504066712658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 541dfaae9e49c744ab26f2b4ed2afbe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 40
 --- !u!136 &136747115659373964
 CapsuleCollider:
   m_ObjectHideFlags: 1

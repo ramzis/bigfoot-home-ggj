@@ -9,7 +9,7 @@ public class Attack : MonoBehaviour
     Ray ray;                                   
     RaycastHit hit;                            
     int layerMask = 1 << 9;
-    float range = 1f;
+    float range = 10f;
     Collider[] enemies;
     Animator m_Animator;
 
@@ -29,6 +29,7 @@ public class Attack : MonoBehaviour
     }
     
     void ProcessAttack(){
+        Debug.Log("Processing attack");
         enemies = Physics.OverlapSphere(transform.position, range, layerMask);
 
         foreach (var enemy in enemies)
@@ -36,7 +37,7 @@ public class Attack : MonoBehaviour
             House house = enemy.GetComponentInParent<House>();
             if(house)
             {
-                //Debug.Log("Damaging " + enemy.name);
+                Debug.Log("Damaging " + enemy.name);
                 house.TakeDamage(damage);
             }
         }

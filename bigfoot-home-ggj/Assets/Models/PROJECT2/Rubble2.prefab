@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4830324557036280}
   - component: {fileID: 33277868223122958}
   - component: {fileID: 23007621202204950}
+  - component: {fileID: 65792967987894218}
   m_Layer: 0
   m_Name: Rubble2
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1215061928913864}
   m_Mesh: {fileID: 4300000, guid: e9ee2acbe6f9b496cb9af17dfbd36745, type: 2}
+--- !u!65 &65792967987894218
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1215061928913864}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.000001, y: 2.4785323, z: 5}
+  m_Center: {x: 2.5000005, y: 0.34996676, z: 2.5}

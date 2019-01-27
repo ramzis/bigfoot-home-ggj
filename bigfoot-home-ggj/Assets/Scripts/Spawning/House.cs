@@ -82,8 +82,19 @@ public class House : MonoBehaviour
 
 	public void SetRubbleState()
 	{
+        if (spawnedModel != null)
+        {
+            Destroy(spawnedModel);
+        }
+
+        if (settings.rubbleModels.Count > 0)
+        {
+            spawnedModel = Instantiate(
+                settings.rubbleModels[Random.Range(0, settings.rubbleModels.Count)], 
+                gameObject.transform.position, Quaternion.identity, transform);
+        }
 		state = SpawnSettings.State.RUBBLE;
-		UpdateModelBasedOnState();
+		
         health = 0;
 	}
 
