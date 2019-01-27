@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour {
             m_Animator.SetBool("Idle", true);
             return;
         }
-        m_Rigidbody.velocity = move * m_MoveSpeed;
+        m_Rigidbody.velocity = new Vector3(move.x * m_MoveSpeed, m_Rigidbody.velocity.y, move.z * m_MoveSpeed);
         transform.forward = Vector3.Lerp(transform.forward, move, m_TurnSpeed * Time.deltaTime);
         m_Animator.SetBool("Idle", false);
     }

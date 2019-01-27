@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private SoundManager soundManager;
     private UIManager uiManager;
     private Attack attack;
+    private GameObject gameOverMenu;
     public Animator deathAnimator;
     public Image deathImage;
 
@@ -39,6 +40,8 @@ public class GameManager : MonoBehaviour
         uiManager = GetComponent<UIManager>();
         soundManager = GetComponent<SoundManager>();
         spawnManager = new SpawnManager(spawnSettings);
+        gameOverMenu = GameObject.Find("GameOver");
+        gameOverMenu.SetActive(false);
         SpawnPlayer();
         spawnManager.PopulateSpawns();
         StartCoroutine(Play());
@@ -46,6 +49,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject SpawnPlayer()
     {
+        player = Instantiate(playerPrefab, new Vector3(-5f, -32f, 10f), Quaternion.identity);
         player = Instantiate(playerPrefab, playerSpawnPoint.position, Quaternion.identity);
         player.name = "Player";
         attack = player.AddComponent<Attack>();
@@ -123,6 +127,7 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "bigfoot_crying1");
         attack.gameObject.SetActive(false);
+        gameOverMenu.SetActive(true);
     }
 
     public void PlayGruntRandomly()
