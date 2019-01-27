@@ -37,15 +37,15 @@ public class GameManager : MonoBehaviour
 
         Spawn spawn;
 
-        /// Create demo spawn points --- TO BE REMOVED
-        for (int i = 0; i < 20; i++)
+        var spawns_go = GameObject.Find("Spawns");
+        if(spawns_go != null)
         {
-            var spawn_t = CreateNewSpawnPoint();
-            spawn = spawn_t.gameObject.AddComponent<Spawn>();
-            spawns.Add(spawn);
-            OffsetRandomlyWithinRangeFromOrigin(spawns);
+            var spawnContainer = spawns_go.GetComponent<SpawnContainer>();
+            if(spawnContainer != null)
+            {
+                spawns = spawnContainer.SpawnList;
+            }
         }
-        ///
 
         currentWave = 0;
 

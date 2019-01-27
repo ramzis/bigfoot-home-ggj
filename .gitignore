@@ -27,6 +27,7 @@ ExportedObj/
 # Jetbrains files
 .idea
 Jetbrains/
+JetBrains.meta
 
 # Unity3D generated meta files
 *.pidb.meta

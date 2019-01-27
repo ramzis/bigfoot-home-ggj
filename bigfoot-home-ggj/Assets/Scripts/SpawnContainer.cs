@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnContainer : MonoBehaviour {
-    public List<GameObject> SpawnList = new List<GameObject>();
+public class SpawnContainer : MonoBehaviour
+{
+    public List<Spawn> SpawnList = new List<Spawn>();
 
-    void Start(){
+    void Start()
+    {
         //Debug.Log("Number of spawn points: " + SpawnList.Count);
     }
 }
