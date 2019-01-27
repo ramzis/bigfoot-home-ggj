@@ -14,7 +14,7 @@ public class SpawnManager
 
 	public House CreateHouse(Transform spawn)
 	{
-		Debug.Log("Creating object @ " + spawn);
+		Debug.Log("Creating house @ " + spawn);
 		if(spawn != null)
 		{
             GameObject house_go = new GameObject("House");

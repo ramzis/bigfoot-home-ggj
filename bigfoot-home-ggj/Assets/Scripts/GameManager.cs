@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-[RequireComponent(typeof(UIManager))]
+[RequireComponent(typeof(UIManager), typeof(SoundManager))]
 public class GameManager : MonoBehaviour
 {
-	public SpawnManager spawnManager;
-    public UIManager uiManager;
-	public List<Spawn> spawns;
-    public SpawnSettings spawnSettings;
+    private GameObject player;
+    private SpawnManager spawnManager;
+    private SoundManager soundManager;
+    private UIManager uiManager;
+    private Attack attack;
+
+    private Dictionary<Spawn, House> houseSpawnMap;
 
     public bool isGameOver;
     public bool isWaveOver;
@@ -17,7 +20,11 @@ public class GameManager : MonoBehaviour
     public int pollution = 0;
     public int threshold = 200;
     public int ticks = 0;
-    public Dictionary<Spawn, House> houseSpawnMap;
+
+    [Header("Options")]
+    public GameObject playerPrefab;
+    public SpawnSettings spawnSettings;
+    public float attackDamage = 50f;
 
     public void OnValidate()
     {
@@ -28,13 +35,22 @@ public class GameManager : MonoBehaviour
 	void Start ()
 	{
         uiManager = GetComponent<UIManager>();
-        spawns = new List<Spawn>();
+        soundManager = GetComponent<SoundManager>();
         houseSpawnMap = new Dictionary<Spawn, House>();
         spawnManager = new SpawnManager(spawnSettings);
-        isGameOver = false;
+        SpawnPlayer();
         UpdateSpawns();
         StartCoroutine(Play());
 	}
+
+    public void SpawnPlayer()
+    {
+        player = Instantiate(playerPrefab, new Vector3(0,0.75f,0f), Quaternion.identity);
+        player.name = "Player";
+        attack = player.AddComponent<Attack>();
+        attack.damage = attackDamage;
+        attack.OnAttack += OnPlayerAttack;
+    }
 
     public void UpdateSpawns()
     {
@@ -67,6 +83,11 @@ public class GameManager : MonoBehaviour
         currentWave = 0;
         pollution = 0;
         ticks = 0;
+        isGameOver = false;
+        attack.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+        soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_punchy_growl");
 
         while (!isGameOver)
         {
@@ -125,6 +146,8 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isGameOver = true;
+        soundManager.PlaySoundByName(soundManager.playerAudioSource, "bigfoot_crying1");
+        attack.gameObject.SetActive(false);
     }
 
     public IEnumerator WaveDurationCounter(float duration)
@@ -179,6 +202,8 @@ public class GameManager : MonoBehaviour
 
         Destroy(house.gameObject);
 
+        soundManager.PlaySoundByName(soundManager.buildingAudioSource, "short_destroy_building");
+
     }
 
     public bool GrowRandomHouse()
@@ -208,5 +233,10 @@ public class GameManager : MonoBehaviour
             }
         }
         return sum;
+    }
+
+    public void OnPlayerAttack()
+    {
+        soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_growl");   
     }
 }

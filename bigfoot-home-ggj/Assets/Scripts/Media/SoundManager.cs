@@ -5,36 +5,40 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-
     public List<AudioClip> sounds;
-    public Dictionary<string,AudioClip> soundsDict;
+    public Dictionary<string, AudioClip> soundsDict;
 
     public AudioSource audioSource = new AudioSource();
+    public AudioSource playerAudioSource = new AudioSource();
+    public AudioSource buildingAudioSource = new AudioSource();
     public AudioSource bgMusic = new AudioSource();
     public AudioSource[] soundList = new AudioSource[5];
-     // add more audio sources if you add more sounds then add the name of the sound into loadSounds.txt 1 sound per line
-     // then you call play sound by ID  where you need to and it should play the sound 
-     // need to create audio sources on each object or access the audio sources on here
-    void Start() 
+    // add more audio sources if you add more sounds then add the name of the sound into loadSounds.txt 1 sound per line
+    // then you call play sound by ID  where you need to and it should play the sound 
+    // need to create audio sources on each object or access the audio sources on here
+    void Start()
     {
         //sounds = new List<AudioClip>();
         soundsDict = new Dictionary<string, AudioClip>();
         LoadSounds();
     }
 
-
     private void LoadSounds()
     {
         TextAsset txt = (TextAsset)Resources.Load("Sounds/loadSounds", typeof(TextAsset));
+        if(txt == null)
+        {
+            Debug.Log("Null asset");
+        }
         string[] lines = Regex.Split(txt.text, "\n|\r|\r\n");
 
         foreach (string line in lines)
         {
             //sounds.Add(Resources.Load<AudioClip>("Sounds/" + line));
             soundsDict[line] = Resources.Load<AudioClip>("Sounds/" + line);
-
         }
     }
+
     public void SetToggleAudioLooping(AudioSource audioSource, bool toggle)
     {
         audioSource.loop = toggle;
@@ -48,6 +52,7 @@ public class SoundManager : MonoBehaviour
             bgMusic.loop = true;
         }
     }
+
     public void StopBackgroundMusic()
     {
         if (bgMusic.isPlaying)
@@ -55,7 +60,8 @@ public class SoundManager : MonoBehaviour
             bgMusic.Stop();
         }
     }
-    public void PlaySound(int i) 
+
+    public void PlaySound(int i)
     {
         //Debug.Log(i);
 
@@ -93,12 +99,12 @@ public class SoundManager : MonoBehaviour
         }
         // else { s.Stop(); }
     }
+
     public void StopSound(AudioSource asource)
     {
         if (asource != null)
             asource.Stop();
     }
-
 }
 
 
