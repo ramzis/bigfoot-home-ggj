@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4856950009654152}
   - component: {fileID: 33566026959485114}
   - component: {fileID: 23175271255980162}
+  - component: {fileID: 65274899249725256}
   m_Layer: 0
   m_Name: Skyscraper1
   m_TagString: Untagged
@@ -84,3 +85,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1571770707527652}
   m_Mesh: {fileID: 4300000, guid: 799eeada4287049ea9792c2790f2030f, type: 2}
+--- !u!65 &65274899249725256
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1571770707527652}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 17.0309, z: 5.8919296}
+  m_Center: {x: 2, y: 8.51545, z: -2.9459648}
