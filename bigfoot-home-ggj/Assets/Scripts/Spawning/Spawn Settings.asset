@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Name: Spawn Settings
   m_EditorClassIdentifier: 
   models:
-  - {fileID: 1165437447886342, guid: f63bd83480ca21242893e501797ffd86, type: 2}
+  - {fileID: 1538933552961030, guid: 713f2f5f5a8d34d8b9cc0da53598b822, type: 2}
   - {fileID: 1286851017014118, guid: 283e866fee32f45f199d7b0958df0e03, type: 2}
   - {fileID: 1007582103474930, guid: 81851b13a37ad4eb382f55fac3d62a64, type: 2}
-  - {fileID: 1386251578332228, guid: 0bda8420fb047d14dbe3269756c73adf, type: 2}
-  - {fileID: 1165437447886342, guid: bded44c8d00e9f045ac36727d6b41edc, type: 2}
+  - {fileID: 1571770707527652, guid: 09ccfedbe0de64bbaae147110c968214, type: 2}
+  - {fileID: 1511387732618140, guid: 32ee3714f20944c3fba44c470cc3634b, type: 2}
   startingHealth:
   - 20
   - 40
