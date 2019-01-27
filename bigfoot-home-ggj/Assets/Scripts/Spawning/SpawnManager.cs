@@ -175,4 +175,9 @@ public class SpawnManager
         }
         return sum;
     }
+
+    public int GetActiveHouseCount()
+    {
+        return houses.FindAll(x => x.state != SpawnSettings.State.RUBBLE && x.state != SpawnSettings.State.EMPTY).Count;
+    }
 }

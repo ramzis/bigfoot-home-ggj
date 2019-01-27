@@ -114,13 +114,13 @@ public class House : MonoBehaviour
             case SpawnSettings.State.EMPTY:
                 return 0;
             case SpawnSettings.State.CONSTRUCTION:
-                return 5;
+                return 1;
             case SpawnSettings.State.HOUSE:
-                return 10;
+                return 2;
             case SpawnSettings.State.APARTMENT:
-                return 15;
+                return 3;
             case SpawnSettings.State.SKYSCRAPER:
-                return 20;
+                return 5;
             case SpawnSettings.State.RUBBLE:
                 return 0;
             default:

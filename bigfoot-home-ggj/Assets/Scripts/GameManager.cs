@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private SoundManager soundManager;
     private UIManager uiManager;
     private Attack attack;
+    public Animator deathAnimator;
 
     public bool isGameOver;
     public bool isWaveOver;
@@ -30,15 +31,15 @@ public class GameManager : MonoBehaviour
         Debug.Assert(spawnSettings.waves.Count > 0, "No wave data available in Spawn Settings");
     }
 
-	void Start ()
-	{
+    void Start()
+    {
         uiManager = GetComponent<UIManager>();
         soundManager = GetComponent<SoundManager>();
         spawnManager = new SpawnManager(spawnSettings);
         SpawnPlayer();
         spawnManager.PopulateSpawns();
         StartCoroutine(Play());
-	}
+    }
 
     public GameObject SpawnPlayer()
     {
@@ -81,6 +82,7 @@ public class GameManager : MonoBehaviour
                 pollution += spawnManager.CalculatePollution();
                 // Update pollution UI display
                 uiManager.pollutionDisplay.text = pollution.ToString();
+                UpdateFog();
                 // Check for Game Over condition
                 if (pollution > threshold)
                 {
@@ -96,7 +98,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             // Go to next wave or stay at last one
-            if(currentWave + 1 < spawnSettings.waves.Count)
+            if (currentWave + 1 < spawnSettings.waves.Count)
             {
                 currentWave++;
             }
@@ -108,7 +110,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("Game over!");
-
+        deathAnimator.SetTrigger("zoom");
         isGameOver = true;
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "bigfoot_crying1");
         attack.gameObject.SetActive(false);
@@ -116,7 +118,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayGruntRandomly()
     {
-        if(Random.Range(0,1f) > 0.75f)
+        if (Random.Range(0, 1f) > 0.75f)
             soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_punchy_growl");
     }
 
@@ -130,7 +132,7 @@ public class GameManager : MonoBehaviour
     public void OnHouseDestroyed(House house)
     {
         Debug.LogFormat("A {0} was destroyed", house.state);
-        if(house != null)
+        if (house != null)
         {
             house.SetRubbleState();
             StartCoroutine(house.Respawn());
@@ -145,6 +147,11 @@ public class GameManager : MonoBehaviour
 
     public void OnPlayerAttack()
     {
-        soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_growl");   
+        soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_growl");
+    }
+
+    public void UpdateFog()
+    {
+        RenderSettings.fogDensity = pollution / 10000f;
     }
 }
