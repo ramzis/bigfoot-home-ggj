@@ -58,6 +58,10 @@ public class SpawnEditor : Editor {
                     if (spawn != null)
                         GameObject.DestroyImmediate(spawn.gameObject);
                 }
+                GameObject[] leftoverClones = GameObject.FindGameObjectsWithTag("SpawnPoint");
+                if (leftoverClones.Length != 0)
+                    foreach (GameObject g in leftoverClones)
+                        GameObject.DestroyImmediate(g);
                 sC.SpawnList.Clear();
             }
         }
