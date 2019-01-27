@@ -4,12 +4,14 @@ using System.Linq;
 using System.Xml;
 using UnityEngine;
 
+
 public class SpawnManager
 {
     private SpawnSettings settings;
     // private Dictionary<Spawn, House> houseSpawnMap;
 
     private List<House> houses;
+    private Random rnd = new Random();
 
     public SpawnManager(SpawnSettings spawnSettings)
 	{
@@ -36,9 +38,19 @@ public class SpawnManager
 		}
 	}
 
-    public List<GameObject> CreateObstacles(List<Transform> spawns)
+    public void CreateObstacles(Transform spawn)
     {
-        throw new System.NotImplementedException();
+        if (spawn != null)
+        {
+            GameObject obstacle_rand = settings.obstacles[0];
+            GameObject obstacle_go = new GameObject("Obstacle");
+            obstacle_go.transform.position = spawn.position;
+            //var obstacle = obstacle_go.AddComponent<GameObject>();
+        }
+        else
+        {
+            Debug.LogWarning("Tried to spawn at null spawn point " + spawn);
+        }
     }
 
     public void PopulateSpawns()

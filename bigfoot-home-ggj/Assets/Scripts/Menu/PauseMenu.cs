@@ -12,6 +12,7 @@ public class PauseMenu : MainMenu {
     {
         pauseMenu = GameObject.Find("Menu");
         pauseMenu.SetActive(false);
+        ToggleCursorLock();
     }
 
 	void Update () {
@@ -24,6 +25,7 @@ public class PauseMenu : MainMenu {
     bool TogglePause()
     {
         pauseMenu.SetActive(!pauseMenu.activeSelf);
+        ToggleCursorLock();
         if (!paused)
         {
             Time.timeScale = 0f;
@@ -41,6 +43,16 @@ public class PauseMenu : MainMenu {
     }
 
     public void ReturnToTitleButton(){
+        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
+    }
+
+    void ToggleCursorLock()
+    {
+        Cursor.visible = !Cursor.visible;
+        if (Cursor.lockState == CursorLockMode.Locked)
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
     }
 }
