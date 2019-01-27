@@ -14,10 +14,6 @@ public class HouseEditor : Editor
 		{
 			myScript.NextState();
 		}
-		if(GUILayout.Button("Empty state"))
-		{
-			myScript.SetEmptyState();
-		}
 		if(GUILayout.Button("Deal 20 damage"))
 		{
 			myScript.TakeDamage(20f);

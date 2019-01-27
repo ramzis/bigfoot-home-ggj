@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class House : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class House : MonoBehaviour
 	public void Init(SpawnSettings settings)
 	{
         this.settings = settings;
-		state = settings.firstState;
+		state = SpawnSettings.State.EMPTY;
 		UpdateModelBasedOnState();
         UpdateHealthBasedOnState();
 	}
@@ -27,9 +28,12 @@ public class House : MonoBehaviour
 			Destroy(spawnedModel);
 		}
 
+        if (state == SpawnSettings.State.EMPTY)
+            return;
+
 		if (state >= settings.firstState && state <= settings.lastState)
 		{
-			if (settings.models.Count > (int) state)
+			if (settings.models.Count > (int) state && state >= 0)
 			{
 				spawnedModel = Instantiate(settings.models[(int) state], gameObject.transform.position, Quaternion.identity, transform);
 			}
@@ -42,9 +46,15 @@ public class House : MonoBehaviour
 
     public void UpdateHealthBasedOnState()
     {
+        if (state == SpawnSettings.State.EMPTY)
+        {
+            health = 0;
+            return;
+        }
+
         if (state >= settings.firstState && state <= settings.lastState)
         {
-            if (settings.startingHealth.Count > (int)state)
+            if (settings.startingHealth.Count > (int)state && state >= 0)
             {
                 health = settings.startingHealth[(int)state];
             }
@@ -70,9 +80,9 @@ public class House : MonoBehaviour
         }
     }
 
-	public void SetEmptyState()
+	public void SetRubbleState()
 	{
-		state = SpawnSettings.State.EMPTY;
+		state = SpawnSettings.State.RUBBLE;
 		UpdateModelBasedOnState();
         health = 0;
 	}
@@ -81,15 +91,18 @@ public class House : MonoBehaviour
 	{
 		if (health <= 0)
 		{
-			Debug.LogWarning("Trying to damage already destroyed house.");
+            if(state != SpawnSettings.State.RUBBLE && state != SpawnSettings.State.EMPTY)
+			    Debug.LogWarning("Trying to damage already destroyed house.");
 		}
 		else
 		{
 			health -= damage;
 			if (health <= 0)
 			{
+                SetRubbleState();
 				if(OnHouseDestroyed != null)
 					OnHouseDestroyed.Invoke(this);
+                StartCoroutine(Respawn());
 			}
 		}
 	}
@@ -108,8 +121,24 @@ public class House : MonoBehaviour
                 return 15;
             case SpawnSettings.State.SKYSCRAPER:
                 return 20;
+            case SpawnSettings.State.RUBBLE:
+                return 0;
             default:
                 return 0;
         }
+    }
+
+    public void ResetHouse()
+    {
+        state = SpawnSettings.State.EMPTY;
+        UpdateHealthBasedOnState();
+        UpdateModelBasedOnState();
+    }
+
+    public IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(Random.Range(1f, 3f));
+        Debug.Log("Reset house");
+        ResetHouse();
     }
 }

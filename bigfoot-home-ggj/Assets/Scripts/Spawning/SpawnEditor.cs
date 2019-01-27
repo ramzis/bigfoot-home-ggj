@@ -14,6 +14,9 @@ public class SpawnEditor : Editor {
     //If Enable Editor is checked, select a GameObject with SpawnContainer component, then click somewhere in the Scene view
     //to spawn a spawn point
 
+    public enum SpawnType{HOUSES, OBSTACLES};
+    public SpawnType spawnType;
+
     void OnEnable()
     {
         spawnPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Spawn.prefab", typeof(GameObject));
@@ -40,7 +43,10 @@ public class SpawnEditor : Editor {
                     Spawn spawn_data = newPoint.GetComponent<Spawn>();
                     spawn_data.state = Spawn.State.EMPTY;
                     spawn_data.id = spawn_count;
-                    spawnParent.GetComponent<SpawnContainer>().SpawnList.Add(spawn_data);
+                    if (spawnType == SpawnType.HOUSES)
+                        spawnParent.GetComponent<SpawnContainer>().SpawnList.Add(spawn_data);
+                    else if (spawnType == SpawnType.OBSTACLES)
+                        spawnParent.GetComponent<SpawnContainer>().ObstacleSpawns.Add(spawn_data);
                     spawn_count++;
                 }
             }
@@ -50,21 +56,32 @@ public class SpawnEditor : Editor {
     public override void OnInspectorGUI()
     {
         EditorEnabled = GUILayout.Toggle(EditorEnabled, "Enable Editor");
+        spawnType = (SpawnType)EditorGUILayout.EnumPopup("Spawn Type: ", spawnType);
         if (GUILayout.Button("Clear spawn count")){
             spawn_count = 0;
             if (spawnParent != null)
             {
                 SpawnContainer sC = spawnParent.GetComponent<SpawnContainer>();
-                foreach (var spawn in sC.SpawnList)
-                {
-                    if (spawn != null)
-                        GameObject.DestroyImmediate(spawn.gameObject);
+                if (spawnType == SpawnType.HOUSES){
+                    foreach (var spawn in sC.SpawnList)
+                    {
+                        if (spawn != null)
+                            GameObject.DestroyImmediate(spawn.gameObject);
+                    }
+                    // GameObject[] leftoverClones = GameObject.FindGameObjectsWithTag("SpawnPoint");
+                    // if (leftoverClones.Length != 0)
+                    //     foreach (GameObject g in leftoverClones)
+                    //         GameObject.DestroyImmediate(g);
+                    sC.SpawnList.Clear();
                 }
-                GameObject[] leftoverClones = GameObject.FindGameObjectsWithTag("SpawnPoint");
-                if (leftoverClones.Length != 0)
-                    foreach (GameObject g in leftoverClones)
-                        GameObject.DestroyImmediate(g);
-                sC.SpawnList.Clear();
+                else if (spawnType == SpawnType.OBSTACLES)
+                {
+                    foreach (var spawn in sC.ObstacleSpawns)
+                    {
+                        if (spawn != null)
+                            GameObject.DestroyImmediate(spawn.gameObject);
+                    }
+                }
             }
         }
     }

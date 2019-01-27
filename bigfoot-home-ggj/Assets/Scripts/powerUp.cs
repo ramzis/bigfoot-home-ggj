@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class powerUp : MonoBehaviour {
     public string power;
+    private bool animationPlayed = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -16,7 +17,11 @@ public class powerUp : MonoBehaviour {
         {
             this.GetComponent<Renderer>().enabled = false;
             this.GetComponent<CapsuleCollider>().enabled = false;
-            if(this.GetComponent<Explosion>().explosion.isStopped)
+            animationPlayed = true;
+        }
+        if(animationPlayed)
+        {
+            if (this.GetComponent<Explosion>().explosion.isStopped)
             {
                 Destroy(this.gameObject);
             }
