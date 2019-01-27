@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(UIManager), typeof(SoundManager))]
 public class GameManager : MonoBehaviour
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     private Attack attack;
     private GameObject gameOverMenu;
     public Animator deathAnimator;
+    public Image deathImage;
 
     public bool isGameOver;
     public bool isWaveOver;
@@ -23,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Options")]
     public GameObject playerPrefab;
+    public Transform playerSpawnPoint;
     public SpawnSettings spawnSettings;
     public float attackDamage = 50f;
 
@@ -47,6 +50,7 @@ public class GameManager : MonoBehaviour
     public GameObject SpawnPlayer()
     {
         player = Instantiate(playerPrefab, new Vector3(-5f, -32f, 10f), Quaternion.identity);
+        player = Instantiate(playerPrefab, playerSpawnPoint.position, Quaternion.identity);
         player.name = "Player";
         attack = player.AddComponent<Attack>();
         attack.damage = attackDamage;
@@ -63,6 +67,8 @@ public class GameManager : MonoBehaviour
         ticks = 0;
         isGameOver = false;
         attack.gameObject.SetActive(true);
+        if (deathImage != null)
+            deathImage.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1f);
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_punchy_growl");
@@ -113,6 +119,10 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("Game over!");
+        if(deathImage != null)
+        {
+            deathImage.gameObject.SetActive(true);
+        }
         deathAnimator.SetTrigger("zoom");
         isGameOver = true;
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "bigfoot_crying1");
