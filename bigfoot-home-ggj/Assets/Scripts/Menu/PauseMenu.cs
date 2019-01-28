@@ -42,6 +42,7 @@ public class PauseMenu : MainMenu {
 
     public void RestartButton()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     
