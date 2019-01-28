@@ -9,7 +9,7 @@ public class Attack : MonoBehaviour
     Ray ray;                                   
     RaycastHit hit;                            
     int layerMask = 1 << 9;
-    float range = 10f;
+    float range = 5.5f;
     Collider[] enemies;
     Animator m_Animator;
 

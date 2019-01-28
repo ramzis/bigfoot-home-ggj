@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(House))]
 public class HouseEditor : Editor
 {
@@ -19,4 +19,6 @@ public class HouseEditor : Editor
 			myScript.TakeDamage(20f);
 		}
 	}
+    
 }
+#endif

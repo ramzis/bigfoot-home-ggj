@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private UIManager uiManager;
     private Attack attack;
     private GameObject gameOverMenu;
-    public Animator deathAnimator;
+//    public Animator deathAnimator;
     public Image deathImage;
 
     public bool isGameOver;
@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject SpawnPlayer()
     {
-        player = Instantiate(playerPrefab, new Vector3(-5f, -32f, 10f), Quaternion.identity);
         player = Instantiate(playerPrefab, playerSpawnPoint.position, Quaternion.identity);
         player.name = "Player";
         attack = player.AddComponent<Attack>();
@@ -60,15 +59,15 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator Play()
     {
-        Debug.Log("Game has started.");
+        //Debug.Log("Game has started.");
 
         currentWave = 0;
         pollution = 0;
         ticks = 0;
         isGameOver = false;
         attack.gameObject.SetActive(true);
-        if (deathImage != null)
-            deathImage.gameObject.SetActive(false);
+        // if (deathImage != null)
+        //     deathImage.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1f);
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_punchy_growl");
@@ -118,16 +117,17 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("Game over!");
-        if(deathImage != null)
-        {
-            deathImage.gameObject.SetActive(true);
-        }
-        deathAnimator.SetTrigger("zoom");
+        //Debug.Log("Game over!");
+        gameOverMenu.SetActive(true);
+        // if(deathImage != null)
+        // {
+        //     deathImage.gameObject.SetActive(true);
+        // }
+        // deathAnimator.SetTrigger("zoom");
         isGameOver = true;
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "bigfoot_crying1");
         attack.gameObject.SetActive(false);
-        gameOverMenu.SetActive(true);
+        
     }
 
     public void PlayGruntRandomly()

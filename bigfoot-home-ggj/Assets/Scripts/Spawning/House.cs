@@ -39,7 +39,7 @@ public class House : MonoBehaviour
 			}
 			else
 			{
-				Debug.LogWarningFormat("Not enough models for state {0}", state);
+				//Debug.LogWarningFormat("Not enough models for state {0}", state);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class House : MonoBehaviour
             }
             else
             {
-                Debug.LogWarningFormat("Not enough models for state {0}", state);
+                //Debug.LogWarningFormat("Not enough models for state {0}", state);
             }
         }
     }
@@ -149,7 +149,7 @@ public class House : MonoBehaviour
     public IEnumerator Respawn()
     {
         yield return new WaitForSeconds(Random.Range(1f, 3f));
-        Debug.Log("Reset house");
+        //Debug.Log("Reset house");
         ResetHouse();
     }
 }

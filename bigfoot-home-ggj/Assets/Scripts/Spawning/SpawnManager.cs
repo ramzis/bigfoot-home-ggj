@@ -33,7 +33,7 @@ public class SpawnManager
 		}
 		else
 		{
-			Debug.LogWarning("Tried to spawn at null spawn point " + spawn);
+			//Debug.LogWarning("Tried to spawn at null spawn point " + spawn);
             return null;
 		}
 	}
@@ -48,7 +48,7 @@ public class SpawnManager
         }
         else
         {
-            Debug.LogWarning("Tried to spawn at null spawn point " + spawn);
+            //Debug.LogWarning("Tried to spawn at null spawn point " + spawn);
         }
     }
 
@@ -74,11 +74,11 @@ public class SpawnManager
 
             if (spawnContainer.ObstacleSpawns == null)
             {
-                Debug.Log("Null obstacle spawn list");
+                //Debug.Log("Null obstacle spawn list");
             }
             else
             {
-                Debug.Log("There are obstacles " + spawnContainer.ObstacleSpawns.Count);
+                //Debug.Log("There are obstacles " + spawnContainer.ObstacleSpawns.Count);
                 foreach (var spawn in spawnContainer.ObstacleSpawns)
                 {
                     if (spawn == null)
@@ -114,7 +114,7 @@ public class SpawnManager
         }
         else
         {
-            Debug.Log("No empty houses");
+            //Debug.Log("No empty houses");
             return null;
         }
     }
@@ -155,7 +155,7 @@ public class SpawnManager
         }
         else
         {
-            Debug.Log("No houses to grow");
+            //Debug.Log("No houses to grow");
             return false;
         }
     }
@@ -165,7 +165,7 @@ public class SpawnManager
         var house = GetEmptyHouse();
         if (house != null)
         {
-            Debug.Log("Grew new house");
+            //Debug.Log("Grew new house");
             house.state = settings.firstState;
             house.UpdateHealthBasedOnState();
             house.UpdateModelBasedOnState();
@@ -173,7 +173,7 @@ public class SpawnManager
         }
         else
         {
-            Debug.Log("No spots for new houses to grow");
+            //Debug.Log("No spots for new houses to grow");
             return false;
         }
     }
@@ -184,12 +184,12 @@ public class SpawnManager
         if(house != null)
         {
             house.ResetHouse();
-            Debug.Log("Reset some rubble");
+            //Debug.Log("Reset some rubble");
             return true;
         }
         else
         {
-            Debug.Log("No rubble found to reset");
+            //Debug.Log("No rubble found to reset");
             return false;
         }
     }
