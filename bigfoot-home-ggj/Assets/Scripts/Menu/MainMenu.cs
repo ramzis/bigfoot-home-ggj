@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject credits;
 
-    GameObject credits;
-
-    void Start()
+    private void OnValidate()
     {
-        credits = GameObject.Find("Credits");
+        Debug.Assert(credits != null, "Assign Credits reference.");
+    }
+
+    private void Start()
+    {
         credits.SetActive(false);
     }
 
@@ -20,7 +25,7 @@ public class MainMenu : MonoBehaviour {
 
     public void CreditsButton()
     {
-        credits.SetActive(true);
+        credits.SetActive(!credits.activeSelf);
     }
 
 	public void ExitButton()

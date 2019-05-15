@@ -7,7 +7,7 @@ public class powerUp : MonoBehaviour {
     private bool animationPlayed = false;
 	// Use this for initialization
 	void Start () {
-		
+        this.GetComponent<Explosion>().explode();
 	}
 	
 	// Update is called once per frame

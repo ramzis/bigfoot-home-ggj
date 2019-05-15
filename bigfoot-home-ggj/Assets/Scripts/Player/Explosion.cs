@@ -28,7 +28,7 @@ public class Explosion : MonoBehaviour {
             House house = enemy.GetComponentInParent<House>();
             if (house)
             {
-                Debug.Log("ExplosionDamaging");
+                //Debug.Log("ExplosionDamaging");
                 house.TakeDamage(damage);
             }
         }

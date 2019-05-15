@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] float m_TurnSpeed = 10f;
     Animator m_Animator;
     Rigidbody m_Rigidbody;
-    CapsuleCollider m_Collider;
+    //CapsuleCollider m_Collider;
     Transform m_Cam;
     Vector3 m_CamForward;
     Vector3 m_Move;
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour {
     {
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
-        m_Collider = GetComponent<CapsuleCollider>();
+        //m_Collider = GetComponent<CapsuleCollider>();
         if (Camera.main != null)
             m_Cam = Camera.main.transform;
         m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
