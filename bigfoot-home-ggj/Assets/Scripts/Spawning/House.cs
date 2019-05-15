@@ -36,7 +36,9 @@ public class House : MonoBehaviour
 			if (settings.models.Count > (int) state && state >= 0)
 			{
 				spawnedModel = Instantiate(settings.models[(int) state], gameObject.transform.position, Quaternion.identity, transform);
-			}
+                spawnedModel.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), spawnedModel.transform.up) *
+                    spawnedModel.transform.rotation;
+            }
 			else
 			{
 				//Debug.LogWarningFormat("Not enough models for state {0}", state);
@@ -92,6 +94,8 @@ public class House : MonoBehaviour
             spawnedModel = Instantiate(
                 settings.rubbleModels[Random.Range(0, settings.rubbleModels.Count)], 
                 gameObject.transform.position, Quaternion.identity, transform);
+            spawnedModel.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), spawnedModel.transform.up) *
+                                              spawnedModel.transform.rotation;
         }
 		state = SpawnSettings.State.RUBBLE;
 		
@@ -111,6 +115,7 @@ public class House : MonoBehaviour
 			if (health <= 0)
 			{
                 SetRubbleState();
+                Instantiate(settings.explosion, transform.position, Quaternion.identity);
 				if(OnHouseDestroyed != null)
 					OnHouseDestroyed.Invoke(this);
                 StartCoroutine(Respawn());

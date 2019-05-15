@@ -22,14 +22,15 @@ public class Attack : MonoBehaviour
 
 	void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine("AnimateAttack");
         }
     }
     
-    void ProcessAttack(){
-        Debug.Log("Processing attack");
+    void ProcessAttack()
+    {
+        // Debug.Log("Processing attack");
         enemies = Physics.OverlapSphere(transform.position, range, layerMask);
 
         foreach (var enemy in enemies)
@@ -37,7 +38,7 @@ public class Attack : MonoBehaviour
             House house = enemy.GetComponentInParent<House>();
             if(house)
             {
-                Debug.Log("Damaging " + enemy.name);
+                // Debug.Log("Damaging " + enemy.name);
                 house.TakeDamage(damage);
             }
         }

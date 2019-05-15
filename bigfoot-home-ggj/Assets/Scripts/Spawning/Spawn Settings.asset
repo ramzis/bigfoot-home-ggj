@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Name: Spawn Settings
   m_EditorClassIdentifier: 
   models:
-  - {fileID: 1538933552961030, guid: 713f2f5f5a8d34d8b9cc0da53598b822, type: 2}
+  - {fileID: 1799271650669948, guid: b163e9e88f2a0eb468bc4347b9a19725, type: 2}
   - {fileID: 1286851017014118, guid: 283e866fee32f45f199d7b0958df0e03, type: 2}
-  - {fileID: 1007582103474930, guid: 81851b13a37ad4eb382f55fac3d62a64, type: 2}
+  - {fileID: 1031854482348080, guid: fddd5f40e9507ab43abc156a410ef4e5, type: 2}
   - {fileID: 1571770707527652, guid: 09ccfedbe0de64bbaae147110c968214, type: 2}
-  - {fileID: 1511387732618140, guid: 32ee3714f20944c3fba44c470cc3634b, type: 2}
   rubbleModels:
-  - {fileID: 1243092369955254, guid: 5a2b32a42d59940e593ab84e77352a79, type: 2}
-  - {fileID: 1511387732618140, guid: 32ee3714f20944c3fba44c470cc3634b, type: 2}
-  - {fileID: 1215061928913864, guid: d1a587bad1bf94d138e43a1e41bcb2b7, type: 2}
+  - {fileID: 1416346821789904, guid: e22eaa2a03ee89341a29f8cd9e39dad5, type: 2}
+  - {fileID: 1745699333663550, guid: 046630749be97e4408e1b8b1ec85f8a7, type: 2}
+  - {fileID: 1215283261825710, guid: 9b7b77cd3e00cf640a6a9d5284e8c8b1, type: 2}
+  explosion: {fileID: 1817513739270534, guid: 047d59f9f5976834e838d938305a61d6, type: 2}
   startingHealth:
   - 20
   - 40
@@ -33,7 +33,7 @@ MonoBehaviour:
     spawnDelay: 1
   obstacles:
   - {fileID: 1065674218379920, guid: d7bfa60d819284bd3ae78bff63657ff3, type: 2}
-  - {fileID: 1907885317073864, guid: c8337ff63a2614626828dc1c74560b97, type: 2}
-  - {fileID: 1648856554107974, guid: 85cbafc24039742db8f0ebd13bd988ac, type: 2}
+  - {fileID: 1623236488192674, guid: 3e5e45acd2b0e0149940a61a150ba7bf, type: 2}
+  - {fileID: 1741775750920790, guid: a3bb1377a20636d43a4a083c3d3303df, type: 2}
   firstState: 0
   lastState: 3

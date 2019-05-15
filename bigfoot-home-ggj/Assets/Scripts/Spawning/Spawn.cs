@@ -11,6 +11,14 @@ public class Spawn : MonoBehaviour
         DESTROYED
     };
 
+    public enum Type
+    {
+        HOUSE,
+        OBSTACLE
+    }
+
     public State state;
+    public Type type;
     public int id = -1;
+
 }

@@ -9,45 +9,74 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1215061928913864}
+  m_RootGameObject: {fileID: 1031854482348080}
   m_IsPrefabAsset: 1
---- !u!1 &1215061928913864
+--- !u!1 &1031854482348080
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4830324557036280}
-  - component: {fileID: 33277868223122958}
-  - component: {fileID: 23007621202204950}
-  - component: {fileID: 65792967987894218}
-  m_Layer: 0
-  m_Name: Rubble2
+  - component: {fileID: 4000104627911244}
+  m_Layer: 9
+  m_Name: ApartmentPivoted
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4830324557036280
+--- !u!1 &1227241840019712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4517377159036530}
+  - component: {fileID: 33816056888941056}
+  - component: {fileID: 23824690201354984}
+  - component: {fileID: 65746702215015858}
+  m_Layer: 9
+  m_Name: Apartment1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000104627911244
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1215061928913864}
+  m_GameObject: {fileID: 1031854482348080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4517377159036530}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23007621202204950
+--- !u!4 &4517377159036530
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1227241840019712}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.01, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000104627911244}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &23824690201354984
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1215061928913864}
+  m_GameObject: {fileID: 1227241840019712}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -57,7 +86,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 8fdc22296ff204895a94adf00a8d4355, type: 2}
+  - {fileID: 2100000, guid: 75a56a2fff47040febcafe56407971b4, type: 2}
+  - {fileID: 2100000, guid: 0807958321f7b42a2992f9aeaf293f8f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -77,22 +107,22 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33277868223122958
+--- !u!33 &33816056888941056
 MeshFilter:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1215061928913864}
-  m_Mesh: {fileID: 4300000, guid: e9ee2acbe6f9b496cb9af17dfbd36745, type: 2}
---- !u!65 &65792967987894218
+  m_GameObject: {fileID: 1227241840019712}
+  m_Mesh: {fileID: 4300000, guid: aade25ec953c44dc7aae830aafdaf03d, type: 2}
+--- !u!65 &65746702215015858
 BoxCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1215061928913864}
+  m_GameObject: {fileID: 1227241840019712}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.000001, y: 2.4785323, z: 5}
-  m_Center: {x: 2.5000005, y: 0.34996676, z: 2.5}
+  m_Size: {x: 3, y: 6, z: 3.0000007}
+  m_Center: {x: 1.5, y: 3, z: -1.5000004}

@@ -12,8 +12,9 @@ public class GameManager : MonoBehaviour
     private SoundManager soundManager;
     private UIManager uiManager;
     private Attack attack;
+    [SerializeField]
     private GameObject gameOverMenu;
-//    public Animator deathAnimator;
+    public Animator deathAnimator;
     public Image deathImage;
 
     public bool isGameOver;
@@ -33,14 +34,14 @@ public class GameManager : MonoBehaviour
     {
         Debug.Assert(spawnSettings != null, "Missing spawn settings. Create new Spawn Settings Asset");
         Debug.Assert(spawnSettings.waves.Count > 0, "No wave data available in Spawn Settings");
+        Debug.Assert(gameOverMenu != null, "Missing Game Over menu.");
     }
 
-    void Start()
+    private void Start()
     {
         uiManager = GetComponent<UIManager>();
         soundManager = GetComponent<SoundManager>();
         spawnManager = new SpawnManager(spawnSettings);
-        gameOverMenu = GameObject.Find("GameOver");
         gameOverMenu.SetActive(false);
         SpawnPlayer();
         spawnManager.PopulateSpawns();
@@ -66,8 +67,6 @@ public class GameManager : MonoBehaviour
         ticks = 0;
         isGameOver = false;
         attack.gameObject.SetActive(true);
-        // if (deathImage != null)
-        //     deathImage.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1f);
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "short_punchy_growl");
@@ -119,11 +118,7 @@ public class GameManager : MonoBehaviour
     {
         //Debug.Log("Game over!");
         gameOverMenu.SetActive(true);
-        // if(deathImage != null)
-        // {
-        //     deathImage.gameObject.SetActive(true);
-        // }
-        // deathAnimator.SetTrigger("zoom");
+        deathAnimator.SetTrigger("zoom");
         isGameOver = true;
         soundManager.PlaySoundByName(soundManager.playerAudioSource, "bigfoot_crying1");
         attack.gameObject.SetActive(false);

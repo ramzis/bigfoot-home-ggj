@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseMenu : MainMenu {
-
+public class PauseMenu : MonoBehaviour
+{
     private bool paused = false;
-    GameObject pauseMenu;
+    [SerializeField]
+    private GameObject pauseMenu;
 
     void Start()
     {
-        pauseMenu = GameObject.Find("Menu");
         pauseMenu.SetActive(false);
     }
 
-	void Update () {
+	void Update ()
+    {
 		if (Input.GetKeyDown(KeyCode.Escape))
         {
             paused = TogglePause();
@@ -36,7 +37,8 @@ public class PauseMenu : MainMenu {
         }
     }
 
-    public void ResumeButton(){
+    public void ResumeButton()
+    {
         paused = TogglePause();
     }
 
@@ -45,9 +47,15 @@ public class PauseMenu : MainMenu {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     
-    public void ReturnToTitleButton(){
+    public void ReturnToTitleButton()
+    {
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
+    }
+
+    public void ExitButton()
+    {
+        Application.Quit();
     }
 
     void ToggleCursorLock()

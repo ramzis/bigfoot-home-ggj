@@ -7,6 +7,7 @@ public class SpawnSettings : ScriptableObject
 {
     public List<GameObject> models;
     public List<GameObject> rubbleModels;
+    public GameObject explosion;
     public List<float> startingHealth;
     public List<Wave> waves;
     public List<GameObject> obstacles;

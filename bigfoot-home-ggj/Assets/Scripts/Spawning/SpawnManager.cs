@@ -11,7 +11,6 @@ public class SpawnManager
     // private Dictionary<Spawn, House> houseSpawnMap;
 
     private List<House> houses;
-    private Random rnd = new Random();
 
     public SpawnManager(SpawnSettings spawnSettings)
 	{
@@ -44,7 +43,9 @@ public class SpawnManager
         {
             if (settings.obstacles.Count < 0)
                 return;
-            GameObject obstacle_rand = GameObject.Instantiate(settings.obstacles[Random.Range(0, settings.obstacles.Count)], spawn.position, Quaternion.identity);
+            var spawnedModel = GameObject.Instantiate(settings.obstacles[Random.Range(0, settings.obstacles.Count)], spawn.position, Quaternion.identity);
+            spawnedModel.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), spawnedModel.transform.up) *
+                                              spawnedModel.transform.rotation;
         }
         else
         {
@@ -54,42 +55,17 @@ public class SpawnManager
 
     public void PopulateSpawns()
     {
-        var spawnContainer = GameObject.FindObjectOfType<SpawnContainer>();
         House house;
+        Spawn[] spawnList = GameObject.FindObjectsOfType<Spawn>();
 
-        if (spawnContainer != null)
+        foreach (var spawn in spawnList)
         {
-            if (spawnContainer.SpawnList == null)
+            if(spawn.type == Spawn.Type.OBSTACLE)
+                CreateObstacle(spawn.transform);
+            else if (spawn.type == Spawn.Type.HOUSE)
             {
-                Debug.Log("Null house spawn list");
-            }
-            else
-            {
-                foreach (var spawn in spawnContainer.SpawnList)
-                {
-                    house = CreateHouse(spawn.transform);
-                    houses.Add(house);
-                }
-            }
-
-            if (spawnContainer.ObstacleSpawns == null)
-            {
-                //Debug.Log("Null obstacle spawn list");
-            }
-            else
-            {
-                //Debug.Log("There are obstacles " + spawnContainer.ObstacleSpawns.Count);
-                foreach (var spawn in spawnContainer.ObstacleSpawns)
-                {
-                    if (spawn == null)
-                    {
-                        Debug.LogWarning("Null spawn");
-                    }
-                    else
-                    {
-                        CreateObstacle(spawn.transform);        
-                    }
-                }
+                house = CreateHouse(spawn.transform);
+                houses.Add(house);
             }
         }
     }
